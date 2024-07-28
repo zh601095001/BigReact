@@ -1,13 +1,14 @@
 import { getBaseRollupPlugins, getPackageJSON, resolvePkgPath } from './utils';
 import generatePackageJson from 'rollup-plugin-generate-package-json';
 
-import alias from "@rollup/plugin-alias";
-const { name, module } = getPackageJSON('react-dom');
+import alias from '@rollup/plugin-alias';
+
+const { name, module, peerDependencies } = getPackageJSON('react-dom');
 const pkgPath = resolvePkgPath(name);
 const pkgDistPath = resolvePkgPath(name, true);
 
 export default [
-	// react
+	// react-dom
 	{
 		input: `${pkgPath}/${module}`,
 		output: [
@@ -22,10 +23,11 @@ export default [
 				name: 'client.js'
 			}
 		],
+		external: [...Object.keys(peerDependencies)],
 		plugins: [
 			...getBaseRollupPlugins({}),
 			alias({
-				hostConfig:`${pkgPath}/src/hostConfig.ts`
+				hostConfig: `${pkgPath}/src/hostConfig.ts`
 			}),
 			generatePackageJson({
 				inputFolder: pkgPath,
@@ -34,12 +36,12 @@ export default [
 					name,
 					description,
 					version,
-					peerDependencies:{
+					peerDependencies: {
 						react: version
 					},
 					main: 'index.js'
 				})
 			})
 		]
-	},
+	}
 ];

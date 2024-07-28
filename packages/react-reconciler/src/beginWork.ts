@@ -8,6 +8,7 @@ import {
 import { processUpdateQueue, UpdateQueue } from './updateQueue';
 import { ReactElementType } from 'shared/ReactTypes';
 import { mountChildFibers, reconcileChildFibers } from './childFibers';
+import { renderWithHooks } from './fiberHooks';
 
 export const beginWork = (wip: FiberNode) => {
 	switch (wip.tag) {
@@ -61,8 +62,7 @@ function reconcileChildren(wip: FiberNode, children?: ReactElementType) {
 }
 
 function updateFunctionComponent(wip: FiberNode) {
-	const nextProps = wip.pendingProps;
-	const nextChildren = nextProps.children;
+	const nextChildren = renderWithHooks(wip);
 	reconcileChildren(wip, nextChildren);
 	return wip.child;
 }
