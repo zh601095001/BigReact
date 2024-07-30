@@ -12,7 +12,7 @@ export default [
 		output: {
 			file: `${pkgDistPath}/index.js`,
 			format: 'umd',
-			name: 'index.js' // 全局变量名，用于在无模块系统中访问
+			name: 'React' // 全局变量名，用于在无模块系统中访问
 		},
 		plugins: [
 			...getBaseRollupPlugins({}),
@@ -34,12 +34,12 @@ export default [
 		output: [
 			{
 				file: `${pkgDistPath}/jsx-runtime.js`,
-				name: 'jsx-runtime.js',
+				name: 'jsx-runtime',
 				format: 'umd'
 			},
 			{
 				file: `${pkgDistPath}/jsx-dev-runtime.js`,
-				name: 'jsx-dev-runtime.js',
+				name: 'jsx-dev-runtime',
 				format: 'umd'
 			}
 		],
