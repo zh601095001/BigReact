@@ -10,6 +10,17 @@ import { ReactElementType } from 'shared/ReactTypes';
 import { mountChildFibers, reconcileChildFibers } from './childFibers';
 import { renderWithHooks } from './fiberHooks';
 
+function reconcileChildren(wip: FiberNode, children?: ReactElementType) {
+	const current = wip.alternate;
+	if (current !== null) {
+		// update
+		wip.child = reconcileChildFibers(wip, current?.child, children);
+	} else {
+		// mount
+		wip.child = mountChildFibers(wip, null, children);
+	}
+}
+
 export const beginWork = (wip: FiberNode) => {
 	switch (wip.tag) {
 		// React组件
@@ -48,17 +59,6 @@ function updateHostComponent(wip: FiberNode) {
 	const nextChildren = nextProps.children;
 	reconcileChildren(wip, nextChildren);
 	return wip.child;
-}
-
-function reconcileChildren(wip: FiberNode, children?: ReactElementType) {
-	const current = wip.alternate;
-	if (current !== null) {
-		// update
-		wip.child = reconcileChildFibers(wip, current?.child, children);
-	} else {
-		// mount
-		wip.child = mountChildFibers(wip, null, children);
-	}
 }
 
 function updateFunctionComponent(wip: FiberNode) {
